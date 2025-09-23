@@ -88,6 +88,15 @@
   --shadow-lg: 0px 2px 0px 0px hsl(20 8% 8% / 0.10), 0px 4px 6px -1px hsl(20 8% 8% / 0.12);
   --shadow-xl: 0px 2px 0px 0px hsl(20 8% 8% / 0.12), 0px 8px 10px -1px hsl(20 8% 8% / 0.14);
   --shadow-2xl: 0px 2px 0px 0px hsl(20 8% 8% / 0.18);
+  
+  /* 3D Button Effects */
+  --button-3d-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15), 0px 2px 6px rgba(0, 0, 0, 0.1);
+  --button-3d-shadow-hover: 0px 12px 30px rgba(0, 0, 0, 0.2), 0px 4px 12px rgba(0, 0, 0, 0.15);
+  --button-3d-shadow-active: 0px 2px 8px rgba(0, 0, 0, 0.2), 0px 1px 3px rgba(0, 0, 0, 0.15);
+  
+  /* Input Field 3D Effects */
+  --input-3d-inset: inset 0px 2px 4px rgba(0, 0, 0, 0.1);
+  --input-3d-glow: 0px 0px 0px 3px rgba(var(--primary), 0.1);
   --tracking-normal: 0em;
   --spacing: 0.25rem;
 
@@ -202,6 +211,15 @@
   --shadow-lg: 0px 2px 0px 0px hsl(0 0% 0% / 0.40), 0px 4px 6px -1px hsl(0 0% 0% / 0.50);
   --shadow-xl: 0px 2px 0px 0px hsl(0 0% 0% / 0.45), 0px 8px 10px -1px hsl(0 0% 0% / 0.55);
   --shadow-2xl: 0px 2px 0px 0px hsl(0 0% 0% / 0.60);
+  
+  /* 3D Button Effects - Dark Mode */
+  --button-3d-shadow: 0px 6px 25px rgba(0, 0, 0, 0.4), 0px 2px 8px rgba(0, 0, 0, 0.3);
+  --button-3d-shadow-hover: 0px 12px 35px rgba(0, 0, 0, 0.5), 0px 4px 15px rgba(0, 0, 0, 0.4);
+  --button-3d-shadow-active: 0px 2px 10px rgba(0, 0, 0, 0.5), 0px 1px 4px rgba(0, 0, 0, 0.4);
+  
+  /* Input Field 3D Effects - Dark Mode */
+  --input-3d-inset: inset 0px 3px 6px rgba(0, 0, 0, 0.3);
+  --input-3d-glow: 0px 0px 0px 3px rgba(var(--primary), 0.15);
 
 }
 
@@ -324,5 +342,46 @@
   .border.active-elevate-2:not(.no-active-interaction-elevate)::after,
   .border.hover-elevate:not(.no-hover-interaction-elevate)::after {
     inset: -1px;
+  }
+
+  /* 3D Button Effects */
+  .btn-3d {
+    box-shadow: var(--button-3d-shadow);
+    transform: translateY(0px);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn-3d:hover {
+    box-shadow: var(--button-3d-shadow-hover);
+    transform: translateY(-2px);
+  }
+
+  .btn-3d:active {
+    box-shadow: var(--button-3d-shadow-active);
+    transform: translateY(0px);
+  }
+
+  /* 3D Input Effects */
+  .input-3d {
+    box-shadow: var(--input-3d-inset);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .input-3d:focus {
+    box-shadow: var(--input-3d-inset), var(--input-3d-glow);
+  }
+
+  /* Glass morphism effect for cards */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Smooth 3D animations */
+  .transform-3d {
+    transform-style: preserve-3d;
+    perspective: 1000px;
   }
 }

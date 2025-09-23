@@ -46,7 +46,7 @@ export default function MatchModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md bg-card border-card-border">
+      <DialogContent className="sm:max-w-md bg-gradient-to-b from-card to-card/90 border-card-border/60 shadow-3d backdrop-blur-sm glass-card">
         <div className="relative p-6 text-center">
           {/* Close Button */}
           <Button

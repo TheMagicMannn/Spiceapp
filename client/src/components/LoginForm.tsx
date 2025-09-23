@@ -30,7 +30,7 @@ export default function LoginForm({
   };
 
   return (
-    <div className="w-full max-w-md mx-auto p-6 bg-card rounded-2xl border border-card-border">
+    <div className="w-full max-w-md mx-auto p-8 bg-gradient-to-b from-card to-card/90 rounded-2xl border border-card-border/60 shadow-3d backdrop-blur-sm glass-card">
       {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-primary mb-2">SPICE</h1>

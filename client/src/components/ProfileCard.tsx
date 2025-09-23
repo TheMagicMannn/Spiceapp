@@ -53,7 +53,7 @@ export default function ProfileCard({
   };
 
   return (
-    <div className="relative w-full max-w-sm mx-auto bg-card rounded-2xl overflow-hidden shadow-xl border border-card-border">
+    <div className="relative w-full max-w-sm mx-auto bg-gradient-to-b from-card to-card/80 rounded-2xl overflow-hidden shadow-3d hover:shadow-3d-hover transition-all duration-300 border border-card-border/60 backdrop-blur-sm glass-card">
       {/* Photo Section */}
       <div className="relative h-96 overflow-hidden">
         <img

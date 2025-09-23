@@ -74,7 +74,7 @@ export default function PremiumModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-lg bg-card border-card-border max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-lg bg-gradient-to-b from-card to-card/90 border-card-border/60 shadow-3d backdrop-blur-sm glass-card max-h-[90vh] overflow-y-auto">
         <div className="p-6">
           {/* Close Button */}
           <Button
