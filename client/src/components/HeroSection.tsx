@@ -40,12 +40,12 @@ export default function HeroSection({ onSignIn, onSignUp }: HeroSectionProps) {
         </p>
         
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+        <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
           <Button
             onClick={onSignIn}
             variant="outline"
             size="lg"
-            className="bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20 text-lg px-8 py-6"
+            className="bg-white/10 backdrop-blur-md border-2 border-white/40 text-white hover:bg-white/20 hover:border-white/60 text-lg px-10 py-4 shadow-3d hover:shadow-3d-hover transition-all duration-300 hover:-translate-y-1 active:translate-y-0 font-semibold"
             data-testid="button-hero-signin"
           >
             Sign In
@@ -53,7 +53,7 @@ export default function HeroSection({ onSignIn, onSignUp }: HeroSectionProps) {
           <Button
             onClick={onSignUp}
             size="lg"
-            className="bg-primary hover:bg-primary/90 text-lg px-8 py-6"
+            className="bg-gradient-to-b from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 text-white text-lg px-10 py-4 shadow-3d hover:shadow-3d-hover transition-all duration-300 hover:-translate-y-1 active:translate-y-0 font-semibold border border-primary-border"
             data-testid="button-hero-signup"
           >
             Sign Up
