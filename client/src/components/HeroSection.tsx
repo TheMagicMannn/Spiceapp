@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import heroImage from "@assets/generated_images/Premium_nightlife_hero_background_99112bdb.png";
+import heroImage from "@assets/generated_images/Pink_silhouettes_dark_background_fd06a0c6.png";
 
 interface HeroSectionProps {
   onSignIn: () => void;
