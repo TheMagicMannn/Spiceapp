@@ -158,7 +158,7 @@ export default function LoginForm({
         <button
           type="submit"
           disabled={isLoading || !email || !password}
-          className="w-full py-4 px-5 bg-gray-900 text-white font-bold text-lg rounded-full border-3 border-pink-500/50 transition-all duration-300 hover:border-pink-500 hover:shadow-lg hover:shadow-pink-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full py-4 px-5 bg-gray-900 text-white font-bold text-lg rounded-full border-3 border-pink-500/50 transition-all duration-300 hover:border-pink-500 hover:shadow-lg hover:shadow-pink-500/50 animate-glow disabled:opacity-50 disabled:cursor-not-allowed"
           data-testid="button-sign-in"
         >
           {isLoading ? "Signing In..." : "Sign In"}
@@ -188,6 +188,24 @@ export default function LoginForm({
           </Button>
         </div>
       </form>
+
+      {/* Custom CSS for animations */}
+      <style>{`
+        @keyframes glow {
+          0%, 100% {
+            box-shadow: 0 0 8px rgba(255, 20, 147, 0.5);
+            border-color: rgba(255, 20, 147, 0.5);
+          }
+          50% {
+            box-shadow: 0 0 16px rgba(255, 20, 147, 1);
+            border-color: rgba(255, 20, 147, 1);
+          }
+        }
+        
+        .animate-glow {
+          animation: glow 2.4s ease-in-out infinite;
+        }
+      `}</style>
 
       {/* Footer */}
       <div className="mt-8 pt-6 border-t border-pink-500/30 text-center">

@@ -157,10 +157,10 @@ function Router() {
   // Login Page
   if (currentView === "login") {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background">
         <LoginForm
           onLogin={handleLogin}
-          onSignup={handleSignUp} // Use the existing handleSignUp
+          onSignup={handleSignUp}
           onForgotPassword={() => console.log("Navigate to forgot password")}
         />
       </div>
@@ -170,10 +170,11 @@ function Router() {
   // Signup Page
   if (currentView === "signup") {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background">
         <SignupForm
-          onSubmit={handleSignupSubmit}
-          onBack={handleBackToLogin}
+          onSignup={handleSignupSubmit}
+          onLogin={() => setCurrentView("login")}
+          isLoading={false}
         />
       </div>
     );
@@ -182,61 +183,120 @@ function Router() {
 
   // Main App
   return (
-    <div className="h-screen bg-background flex flex-col">
-      {/* Chat Interface */}
-      {showChat && selectedMatch ? (
-        <ChatInterface
-          matchId={selectedMatch.id}
-          matchName={selectedMatch.name}
-          matchPhoto={selectedMatch.photos[0]}
-          messages={mockMessages}
-          currentUserId="current-user"
-          onSendMessage={(text) => console.log(`Sending: ${text}`)}
-          onBack={() => setShowChat(false)}
-        />
-      ) : (
-        <>
-          {/* Main Content */}
-          <div className="flex-1 pb-16">
-            {activeTab === "discover" && (
-              <SwipeInterface
-                profiles={mockProfiles}
-                onMatch={handleMatch}
-                onFilterClick={() => console.log("Opening filters")}
-                onSettingsClick={() => console.log("Opening settings")}
-              />
-            )}
-            {activeTab === "matches" && (
-              <div className="flex items-center justify-center h-full p-8 text-center">
-                <div>
-                  <h2 className="text-2xl font-bold mb-4">Your Matches</h2>
-                  <p className="text-muted-foreground">
-                    Matches will appear here when you connect with someone special.
-                  </p>
-                </div>
-              </div>
-            )}
-            {activeTab === "profile" && (
-              <div className="flex items-center justify-center h-full p-8 text-center">
-                <div>
-                  <h2 className="text-2xl font-bold mb-4">Your Profile</h2>
-                  <p className="text-muted-foreground">
-                    Profile management coming soon.
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Background Image - Same as Hero Section */}
+      <div 
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: 'url(/attached_assets/Pink_silhouettes_dark_background_fd06a0c6_1758731816680.png)',
+          filter: 'blur(2px)',
+        }}
+      />
+      
+      {/* Overlay Gradient */}
+      <div className="fixed inset-0 bg-black/80" />
 
-          {/* Bottom Navigation */}
-          <BottomNavigation
-            activeTab={activeTab}
-            onTabChange={handleTabChange}
-            matchCount={3}
-            messageCount={1}
+      <div className="relative z-10 h-screen flex flex-col">
+        {/* Chat Interface */}
+        {showChat && selectedMatch ? (
+          <ChatInterface
+            matchId={selectedMatch.id}
+            matchName={selectedMatch.name}
+            matchPhoto={selectedMatch.photos[0]}
+            messages={mockMessages}
+            currentUserId="current-user"
+            onSendMessage={(text) => console.log(`Sending: ${text}`)}
+            onBack={() => setShowChat(false)}
           />
-        </>
-      )}
+        ) : (
+          <>
+            {/* Main Content */}
+            <div className="flex-1 pb-16">
+              {activeTab === "discover" && (
+                <SwipeInterface
+                  profiles={mockProfiles}
+                  onMatch={handleMatch}
+                  onFilterClick={() => console.log("Opening filters")}
+                  onSettingsClick={() => console.log("Opening settings")}
+                />
+              )}
+              {activeTab === "matches" && (
+                <div className="flex flex-col items-center justify-center h-full p-8 text-center">
+                  {/* SPICE Logo */}
+                  <div className="mb-8 text-center">
+                    <h1 
+                      className="text-4xl font-bold mb-2"
+                      style={{ 
+                        background: 'linear-gradient(135deg, #ff1493, #ff69b4, #ff91a4)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        backgroundClip: 'text',
+                        textShadow: '0 0 20px rgba(255, 20, 147, 0.5)',
+                      }}
+                    >
+                      SPICE
+                    </h1>
+                    <div 
+                      className="w-16 h-1 mx-auto rounded-full"
+                      style={{
+                        background: 'linear-gradient(90deg, #ff1493, #ff69b4)',
+                        boxShadow: '0 0 10px rgba(255, 20, 147, 0.8)'
+                      }}
+                    />
+                  </div>
+                  <div className="bg-black/70 rounded-2xl border-2 border-pink-500/60 p-6 shadow-lg shadow-pink-500/20">
+                    <h2 className="text-2xl font-bold mb-4 text-white">Your Matches</h2>
+                    <p className="text-white/80">
+                      Matches will appear here when you connect with someone special.
+                    </p>
+                  </div>
+                </div>
+              )}
+              {activeTab === "profile" && (
+                <div className="flex flex-col items-center justify-center h-full p-8 text-center">
+                  {/* SPICE Logo */}
+                  <div className="mb-8 text-center">
+                    <h1 
+                      className="text-4xl font-bold mb-2"
+                      style={{ 
+                        background: 'linear-gradient(135deg, #ff1493, #ff69b4, #ff91a4)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        backgroundClip: 'text',
+                        textShadow: '0 0 20px rgba(255, 20, 147, 0.5)',
+                      }}
+                    >
+                      SPICE
+                    </h1>
+                    <div 
+                      className="w-16 h-1 mx-auto rounded-full"
+                      style={{
+                        background: 'linear-gradient(90deg, #ff1493, #ff69b4)',
+                        boxShadow: '0 0 10px rgba(255, 20, 147, 0.8)'
+                      }}
+                    />
+                  </div>
+                  <div className="bg-black/70 rounded-2xl border-2 border-pink-500/60 p-6 shadow-lg shadow-pink-500/20">
+                    <h2 className="text-2xl font-bold mb-4 text-white">Your Profile</h2>
+                    <p className="text-white/80">
+                      Profile management coming soon.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Bottom Navigation */}
+            <BottomNavigation
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
+              matchCount={3}
+              messageCount={1}
+            />
+          </>
+        )}
+      </div>
+    </div>
 
       {/* Modals */}
       {showMatch && selectedMatch && (
