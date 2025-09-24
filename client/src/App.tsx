@@ -13,6 +13,7 @@ import ChatInterface from "@/components/ChatInterface";
 import BottomNavigation from "@/components/BottomNavigation";
 import MatchModal from "@/components/MatchModal";
 import PremiumModal from "@/components/PremiumModal";
+import SignupForm from "@/components/SignupForm"; // Assuming SignupForm is created and imported
 
 // Mock data - TODO: remove mock functionality
 import femaleProfile from "@assets/generated_images/Female_profile_photo_sample_cb9ac9a5.png";
@@ -20,7 +21,7 @@ import maleProfile from "@assets/generated_images/Male_profile_photo_sample_254e
 import coupleProfile from "@assets/generated_images/Couple_profile_photo_sample_c7dce5fc.png";
 
 function Router() {
-  const [currentView, setCurrentView] = useState<"landing" | "login" | "app">("landing");
+  const [currentView, setCurrentView] = useState<"landing" | "login" | "signup">("landing");
   const [activeTab, setActiveTab] = useState<"discover" | "matches" | "messages" | "profile" | "premium">("discover");
   const [showMatch, setShowMatch] = useState(false);
   const [showPremium, setShowPremium] = useState(false);
@@ -42,7 +43,7 @@ function Router() {
       profileType: "single" as const
     },
     {
-      id: "2", 
+      id: "2",
       name: "Marcus & Sarah",
       age: 32,
       location: "Brooklyn, NY",
@@ -77,7 +78,7 @@ function Router() {
       type: "text" as const
     },
     {
-      id: "2", 
+      id: "2",
       text: "Hi Alexandra! Thank you, yours is amazing too. That wine tasting photo looks incredible!",
       timestamp: new Date(Date.now() - 240000),
       senderId: "current-user",
@@ -91,15 +92,33 @@ function Router() {
   };
 
   const handleSignUp = () => {
-    setCurrentView("login");
+    console.log("Sign up clicked");
+    setCurrentView("signup");
   };
 
   const handleLogin = (email: string, password: string) => {
-    console.log(`Logging in with ${email}`);
-    // Simulate login
-    setTimeout(() => {
-      setCurrentView("app");
-    }, 1000);
+    console.log(`Login with email: ${email}, password: [REDACTED]`);
+    // Handle login logic here
+    setCurrentView("app");
+  };
+
+  const handleSignupSubmit = (userData: {
+    email: string;
+    password: string;
+    name: string;
+    age: string;
+  }) => {
+    console.log(`Signup with data:`, userData);
+    // Handle signup logic here
+    setCurrentView("login"); // Redirect to login after signup
+  };
+
+  const handleBackToLogin = () => {
+    setCurrentView("login");
+  };
+
+  const handleBackToSignup = () => {
+    setCurrentView("signup");
   };
 
   const handleMatch = (profileId: string) => {
@@ -141,12 +160,25 @@ function Router() {
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <LoginForm
           onLogin={handleLogin}
-          onSignup={() => console.log("Navigate to signup")}
+          onSignup={handleSignUp} // Use the existing handleSignUp
           onForgotPassword={() => console.log("Navigate to forgot password")}
         />
       </div>
     );
   }
+
+  // Signup Page
+  if (currentView === "signup") {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <SignupForm
+          onSubmit={handleSignupSubmit}
+          onBack={handleBackToLogin}
+        />
+      </div>
+    );
+  }
+
 
   // Main App
   return (
