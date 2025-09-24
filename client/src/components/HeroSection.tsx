@@ -58,8 +58,8 @@ export default function HeroSection({ onSignIn, onSignUp }: HeroSectionProps) {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80)',
-          filter: 'blur(8px)',
+          backgroundImage: 'url(/attached_assets/Pink_silhouettes_dark_background_fd06a0c6_1758731816680.png)',
+          filter: 'blur(2px)',
         }}
       />
       
