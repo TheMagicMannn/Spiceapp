@@ -185,14 +185,14 @@ function Router() {
   return (
     <div className="relative min-h-screen overflow-hidden">
       {/* Background Image - Same as Hero Section */}
-      <div 
+      <div
         className="fixed inset-0 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: 'url(/attached_assets/Pink_silhouettes_dark_background_fd06a0c6_1758731816680.png)',
           filter: 'blur(2px)',
         }}
       />
-      
+
       {/* Overlay Gradient */}
       <div className="fixed inset-0 bg-black/80" />
 
@@ -224,9 +224,9 @@ function Router() {
                 <div className="flex flex-col items-center justify-center h-full p-8 text-center">
                   {/* SPICE Logo */}
                   <div className="mb-8 text-center">
-                    <h1 
+                    <h1
                       className="text-4xl font-bold mb-2"
-                      style={{ 
+                      style={{
                         background: 'linear-gradient(135deg, #ff1493, #ff69b4, #ff91a4)',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
@@ -236,7 +236,7 @@ function Router() {
                     >
                       SPICE
                     </h1>
-                    <div 
+                    <div
                       className="w-16 h-1 mx-auto rounded-full"
                       style={{
                         background: 'linear-gradient(90deg, #ff1493, #ff69b4)',
@@ -256,9 +256,9 @@ function Router() {
                 <div className="flex flex-col items-center justify-center h-full p-8 text-center">
                   {/* SPICE Logo */}
                   <div className="mb-8 text-center">
-                    <h1 
+                    <h1
                       className="text-4xl font-bold mb-2"
-                      style={{ 
+                      style={{
                         background: 'linear-gradient(135deg, #ff1493, #ff69b4, #ff91a4)',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
@@ -268,7 +268,7 @@ function Router() {
                     >
                       SPICE
                     </h1>
-                    <div 
+                    <div
                       className="w-16 h-1 mx-auto rounded-full"
                       style={{
                         background: 'linear-gradient(90deg, #ff1493, #ff69b4)',
@@ -296,7 +296,6 @@ function Router() {
           </>
         )}
       </div>
-    </div>
 
       {/* Modals */}
       {showMatch && selectedMatch && (
