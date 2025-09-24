@@ -74,7 +74,7 @@ export default function HeroSection({ onSignIn, onSignUp }: HeroSectionProps) {
 
         {/* SPICE Logo */}
         <img
-          src="https://i.imgur.com/9Gxlq3F.png"
+          src="/attached_assets/IMG_3053_1758731381956.png"
           alt="SPICE Logo"
           className="w-48 h-16 object-contain mb-2 transition-transform duration-1500 ease-in-out"
           style={{ 
@@ -134,7 +134,7 @@ export default function HeroSection({ onSignIn, onSignUp }: HeroSectionProps) {
       </div>
 
       {/* Custom CSS for animations */}
-      <style jsx>{`
+      <style>{`
         @keyframes fade-in {
           from {
             opacity: 0;
