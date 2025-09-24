@@ -73,14 +73,28 @@ export default function HeroSection({ onSignIn, onSignUp }: HeroSectionProps) {
         <div className="flex-1" />
 
         {/* SPICE Logo */}
-        <img
-          src="/attached_assets/IMG_3053_1758731381956.png"
-          alt="SPICE Logo"
-          className="w-48 h-16 object-contain mb-2 transition-transform duration-1500 ease-in-out"
-          style={{ 
-            transform: `scale(${logoScale})`,
-          }}
-        />
+        <div className="mb-6 text-center">
+          <h1 
+            className="text-6xl md:text-7xl font-bold mb-2 transition-transform duration-1500 ease-in-out"
+            style={{ 
+              transform: `scale(${logoScale})`,
+              background: 'linear-gradient(135deg, #ff1493, #ff69b4, #ff91a4)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              textShadow: '0 0 30px rgba(255, 20, 147, 0.5)',
+            }}
+          >
+            SPICE
+          </h1>
+          <div 
+            className="w-24 h-1 mx-auto rounded-full"
+            style={{
+              background: 'linear-gradient(90deg, #ff1493, #ff69b4)',
+              boxShadow: '0 0 10px rgba(255, 20, 147, 0.8)'
+            }}
+          />
+        </div>
 
         {/* Headline */}
         <div className="flex flex-wrap justify-center mb-5">
