@@ -1,10 +1,11 @@
 
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { useLocation } from 'wouter';
 
 interface HeroSectionProps {
-  onSignIn: () => void;
-  onSignUp: () => void;
+  onSignIn?: () => void;
+  onSignUp?: () => void;
 }
 
 const headlineWords = [
@@ -19,6 +20,8 @@ const subtext =
   'Join thousands of adventurous singles\nand couples exploring connections in a\nsafe, premium environment.';
 
 export default function HeroSection({ onSignIn, onSignUp }: HeroSectionProps) {
+  const [, setLocation] = useLocation();
+  
   // Animation states
   const [showHeadline, setShowHeadline] = useState(false);
   const [showSubtext, setShowSubtext] = useState(false);
@@ -26,6 +29,22 @@ export default function HeroSection({ onSignIn, onSignUp }: HeroSectionProps) {
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [logoScale, setLogoScale] = useState(1);
   const [headlineVisible, setHeadlineVisible] = useState<boolean[]>(new Array(headlineWords.length).fill(false));
+
+  const handleSignIn = () => {
+    if (onSignIn) {
+      onSignIn();
+    } else {
+      setLocation('/login');
+    }
+  };
+
+  const handleSignUp = () => {
+    if (onSignUp) {
+      onSignUp();
+    } else {
+      setLocation('/signup');
+    }
+  };
 
   useEffect(() => {
     // Logo pulse animation
@@ -122,8 +141,8 @@ export default function HeroSection({ onSignIn, onSignUp }: HeroSectionProps) {
         {/* Buttons */}
         {showButtons && (
           <div className="w-full max-w-sm space-y-4 animate-fade-in">
-            <AnimatedButton onClick={onSignIn} text="Sign In" />
-            <AnimatedButton onClick={onSignUp} text="Sign Up" />
+            <AnimatedButton onClick={handleSignIn} text="Sign In" />
+            <AnimatedButton onClick={handleSignUp} text="Sign Up" />
           </div>
         )}
 

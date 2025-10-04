@@ -16,3 +16,29 @@ export const insertUserSchema = createInsertSchema(users).pick({
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
+
+// Types for the new pages (compatible with Supabase)
+export interface Profile {
+  id: string;
+  userId: string;
+  displayName: string;
+  age: number;
+  bio: string;
+  location: string;
+  gender?: string;
+  seekingGender?: string;
+  accountType: 'single' | 'couple';
+  isVerified: boolean;
+  isPremium: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProfilePhoto {
+  id: string;
+  profileId: string;
+  url: string;
+  isPrimary: boolean;
+  order: number;
+  createdAt: string;
+}
