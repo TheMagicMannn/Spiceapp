@@ -42,3 +42,18 @@ export interface ProfilePhoto {
   order: number;
   createdAt: string;
 }
+
+// Community post schema for IsoPage
+export interface InsertCommunityPost {
+  title: string;
+  content: string;
+  category: string;
+  isAnonymous: boolean;
+}
+
+export const insertCommunityPostSchema = z.object({
+  title: z.string().min(1).max(200),
+  content: z.string().min(1).max(2000),
+  category: z.string().min(1),
+  isAnonymous: z.boolean(),
+});

@@ -16,7 +16,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Users, User, Camera, Heart, Shield, Info, MapPin, Settings, ArrowLeft, ArrowRight } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/hooks/use-toast'
-import { storage, supabase } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase'
 
 // Enhanced profile setup schema
 const profileSetupSchema = z.object({
@@ -279,7 +279,10 @@ export default function ProfileSetup({ onComplete }: ProfileSetupProps) {
     const photo = uploadedPhotos[index]
     if (photo.path) {
       try {
-        await storage.deleteProfilePhoto(photo.path)
+        // Extract file path from URL and delete from Supabase storage
+           const url = new URL(photo.path);
+           const filePath = url.pathname.split('/').slice(2).join('/');
+           await supabase.storage.from('photos').remove([filePath]);
       } catch (error) {
         console.error('Error deleting photo from storage:', error)
       }

@@ -19,9 +19,7 @@ import Browse from "@/pages/Browse";
 import Matches from "@/pages/Matches";
 import Messages from "@/pages/Messages";
 import Profile from "@/pages/Profile";
-import Events from "@/pages/Events";
 import Community from "@/pages/Community";
-import Membership from "@/pages/Membership";
 import Support from "@/pages/Support";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfService from "@/pages/TermsOfService";
@@ -165,14 +163,12 @@ function AppRoutes() {
       </Route>
       
       {/* Protected Routes */}
-      <Route path="/browse" component={() => <ProtectedRoute component={Browse} />} />
+      <Route path="/community" component={() => <ProtectedRoute component={Community} />} />
       <Route path="/matches" component={() => <ProtectedRoute component={Matches} />} />
+      <Route path="/browse" component={() => <ProtectedRoute component={Browse} />} />
       <Route path="/messages" component={() => <ProtectedRoute component={Messages} />} />
       <Route path="/messages/:matchId" component={() => <ProtectedRoute component={Messages} />} />
       <Route path="/profile" component={() => <ProtectedRoute component={Profile} />} />
-      <Route path="/events" component={() => <ProtectedRoute component={Events} />} />
-      <Route path="/community" component={() => <ProtectedRoute component={Community} />} />
-      <Route path="/membership" component={() => <ProtectedRoute component={Membership} />} />
       
       {/* Public Info Pages */}
       <Route path="/support">

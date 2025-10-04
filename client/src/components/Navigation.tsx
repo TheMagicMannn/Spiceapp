@@ -2,14 +2,11 @@ import { useLocation } from 'wouter';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { 
-  Home, 
-  Search, 
+  Users,
   Heart, 
+  Search, 
   MessageCircle, 
   User, 
-  Calendar,
-  Users,
-  Crown,
   LogOut
 } from 'lucide-react';
 
@@ -18,12 +15,10 @@ export default function Navigation() {
   const { signOut } = useAuth();
 
   const navItems = [
-    { path: '/browse', icon: Search, label: 'Browse' },
-    { path: '/matches', icon: Heart, label: 'Matches' },
-    { path: '/messages', icon: MessageCircle, label: 'Messages' },
-    { path: '/events', icon: Calendar, label: 'Events' },
     { path: '/community', icon: Users, label: 'Community' },
-    { path: '/membership', icon: Crown, label: 'Premium' },
+    { path: '/matches', icon: Heart, label: 'Matches' },
+    { path: '/browse', icon: Search, label: 'Browse' },
+    { path: '/messages', icon: MessageCircle, label: 'Messages' },
     { path: '/profile', icon: User, label: 'Profile' },
   ];
 
