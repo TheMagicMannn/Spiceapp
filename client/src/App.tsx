@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider, useAuth } from "@/hooks/useAuth";
+import { useProfile } from "@/hooks/useProfile";
+import { useDiscovery } from "@/hooks/useDiscovery";
+import { useMatches } from "@/hooks/useMatches";
+import { useSwipe } from "@/hooks/useSwipe";
 
 // Components
 import HeroSection from "@/components/HeroSection";
@@ -13,7 +18,8 @@ import ChatInterface from "@/components/ChatInterface";
 import BottomNavigation from "@/components/BottomNavigation";
 import MatchModal from "@/components/MatchModal";
 import PremiumModal from "@/components/PremiumModal";
-import SignupForm from "@/components/SignupForm"; // Assuming SignupForm is created and imported
+import SignupForm from "@/components/SignupForm";
+import ProfileSetup from "@/components/ProfileSetup";
 
 // Mock data - TODO: remove mock functionality
 import femaleProfile from "@assets/generated_images/Female_profile_photo_sample_cb9ac9a5.png";
@@ -21,71 +27,30 @@ import maleProfile from "@assets/generated_images/Male_profile_photo_sample_254e
 import coupleProfile from "@assets/generated_images/Couple_profile_photo_sample_c7dce5fc.png";
 
 function Router() {
-  const [currentView, setCurrentView] = useState<"landing" | "login" | "signup">("landing");
+  const { user, signIn, signOut, loading: authLoading } = useAuth();
+  const { profile, loading: profileLoading, createProfile } = useProfile();
+  const [currentView, setCurrentView] = useState<"landing" | "login" | "signup" | "profile-setup">("landing");
   const [activeTab, setActiveTab] = useState<"discover" | "matches" | "messages" | "profile" | "premium">("discover");
   const [showMatch, setShowMatch] = useState(false);
   const [showPremium, setShowPremium] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [selectedMatch, setSelectedMatch] = useState<any>(null);
+  const [matchedProfile, setMatchedProfile] = useState<any>(null);
 
-  // TODO: remove mock functionality
-  const mockProfiles = [
-    {
-      id: "1",
-      name: "Alexandra",
-      age: 28,
-      location: "Manhattan, NY",
-      photos: [femaleProfile],
-      bio: "Wine enthusiast, yoga instructor, and adventure seeker. Looking for genuine connections with like-minded individuals who appreciate the finer things in life.",
-      interests: ["Wine Tasting", "Yoga", "Travel", "Fine Dining", "Art", "Dancing", "Hiking", "Photography"],
-      isVerified: true,
-      isPremium: true,
-      profileType: "single" as const
-    },
-    {
-      id: "2",
-      name: "Marcus & Sarah",
-      age: 32,
-      location: "Brooklyn, NY",
-      photos: [coupleProfile],
-      bio: "Adventurous couple seeking new experiences and meaningful connections. We love exploring the city's nightlife and cultural scene together.",
-      interests: ["Dancing", "Travel", "Fine Dining", "Music", "Art Galleries", "Wine"],
-      isVerified: true,
-      isPremium: false,
-      profileType: "couple" as const
-    },
-    {
-      id: "3",
-      name: "James",
-      age: 35,
-      location: "Chelsea, NY",
-      photos: [maleProfile],
-      bio: "Entrepreneur with a passion for life and meaningful connections. Looking for someone who shares my love for adventure and sophisticated experiences.",
-      interests: ["Business", "Fitness", "Wine", "Travel", "Fine Arts", "Jazz"],
-      isVerified: false,
-      isPremium: true,
-      profileType: "single" as const
+  // Redirect logic based on auth state
+  useEffect(() => {
+    if (!authLoading) {
+      if (user && !profile && !profileLoading) {
+        setCurrentView("profile-setup");
+      } else if (user && profile) {
+        setCurrentView("app" as any);
+      } else if (!user) {
+        setCurrentView("landing");
+      }
     }
-  ];
+  }, [user, profile, authLoading, profileLoading]);
 
-  const mockMessages = [
-    {
-      id: "1",
-      text: "Hey! Thanks for the match. I love your profile 😊",
-      timestamp: new Date(Date.now() - 300000),
-      senderId: "1",
-      senderName: "Alexandra",
-      type: "text" as const
-    },
-    {
-      id: "2",
-      text: "Hi Alexandra! Thank you, yours is amazing too. That wine tasting photo looks incredible!",
-      timestamp: new Date(Date.now() - 240000),
-      senderId: "current-user",
-      senderName: "You",
-      type: "text" as const
-    }
-  ];
+  // Real data will be fetched from Supabase via hooks
 
   const handleSignIn = () => {
     setCurrentView("login");
@@ -96,21 +61,23 @@ function Router() {
     setCurrentView("signup");
   };
 
-  const handleLogin = (email: string, password: string) => {
-    console.log(`Login with email: ${email}, password: [REDACTED]`);
-    // Handle login logic here
-    setCurrentView("app");
+  const handleLogin = async (email: string, password: string) => {
+    const { error } = await signIn(email, password);
+    if (error) {
+      console.error('Login error:', error);
+      alert(error.message || 'Failed to login');
+    }
+    // Auth state change will handle navigation
   };
 
-  const handleSignupSubmit = (userData: {
+  const handleSignupSubmit = async (userData: {
     email: string;
     password: string;
     name: string;
     age: string;
   }) => {
-    console.log(`Signup with data:`, userData);
-    // Handle signup logic here
-    setCurrentView("login"); // Redirect to login after signup
+    // Signup is handled in SignupForm component
+    // After successful signup, user will be redirected to profile setup
   };
 
   const handleBackToLogin = () => {
@@ -121,12 +88,9 @@ function Router() {
     setCurrentView("signup");
   };
 
-  const handleMatch = (profileId: string) => {
-    const matchedProfile = mockProfiles.find(p => p.id === profileId);
-    if (matchedProfile) {
-      setSelectedMatch(matchedProfile);
-      setShowMatch(true);
-    }
+  const handleMatch = (profile: any) => {
+    setMatchedProfile(profile);
+    setShowMatch(true);
   };
 
   const handleStartChat = (userId: string) => {
@@ -144,6 +108,28 @@ function Router() {
       setShowChat(true);
     }
   };
+
+  // Show loading while checking auth
+  if (authLoading || profileLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <h1
+            className="text-4xl font-bold mb-4"
+            style={{
+              background: 'linear-gradient(135deg, #ff1493, #ff69b4, #ff91a4)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
+          >
+            SPICE
+          </h1>
+          <p className="text-white/80">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Landing Page
   if (currentView === "landing") {
@@ -176,6 +162,15 @@ function Router() {
           onLogin={() => setCurrentView("login")}
           isLoading={false}
         />
+      </div>
+    );
+  }
+
+  // Profile Setup Page
+  if (currentView === "profile-setup") {
+    return (
+      <div className="min-h-screen bg-background">
+        <ProfileSetup onComplete={() => setCurrentView("app" as any)} />
       </div>
     );
   }
@@ -214,7 +209,6 @@ function Router() {
             <div className="flex-1 pb-16">
               {activeTab === "discover" && (
                 <SwipeInterface
-                  profiles={mockProfiles}
                   onMatch={handleMatch}
                   onFilterClick={() => console.log("Opening filters")}
                   onSettingsClick={() => console.log("Opening settings")}
@@ -334,10 +328,12 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-      </TooltipProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+        </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

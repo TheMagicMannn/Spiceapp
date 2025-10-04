@@ -1,49 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProfileCard from "./ProfileCard";
 import { Button } from "@/components/ui/button";
 import { Settings, Filter } from "lucide-react";
-
-interface Profile {
-  id: string;
-  name: string;
-  age: number;
-  location: string;
-  photos: string[];
-  bio: string;
-  interests: string[];
-  isVerified?: boolean;
-  isPremium?: boolean;
-  profileType: "single" | "couple";
-}
+import { useDiscovery } from "@/hooks/useDiscovery";
+import { useSwipe } from "@/hooks/useSwipe";
+import { Profile } from "@/lib/supabase";
 
 interface SwipeInterfaceProps {
-  profiles: Profile[];
-  onMatch: (profileId: string) => void;
+  onMatch: (profile: Profile) => void;
   onFilterClick: () => void;
   onSettingsClick: () => void;
 }
 
 export default function SwipeInterface({
-  profiles,
   onMatch,
   onFilterClick,
   onSettingsClick,
 }: SwipeInterfaceProps) {
+  const { profiles, loading: profilesLoading, refetch } = useDiscovery();
+  const { like, pass, loading: swipeLoading } = useSwipe();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [matches, setMatches] = useState<string[]>([]);
 
   const currentProfile = profiles[currentIndex];
 
-  const handleLike = (id: string) => {
-    // Simulate random match (50% chance for demo)
-    if (Math.random() > 0.5) {
+  const handleLike = async (id: string) => {
+    if (!currentProfile) return;
+    
+    const { isMatch } = await like(currentProfile);
+    
+    if (isMatch) {
       setMatches(prev => [...prev, id]);
-      onMatch(id);
+      onMatch(currentProfile);
     }
     nextProfile();
   };
 
-  const handlePass = () => {
+  const handlePass = async () => {
+    if (!currentProfile) return;
+    
+    await pass(currentProfile);
     nextProfile();
   };
 
@@ -51,14 +47,22 @@ export default function SwipeInterface({
     setCurrentIndex(prev => prev + 1);
   };
 
+  if (profilesLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full p-8 text-center">
+        <div className="text-white/80">Loading profiles...</div>
+      </div>
+    );
+  }
+
   if (!currentProfile) {
     return (
       <div className="flex flex-col items-center justify-center h-full p-8 text-center">
         <div className="text-6xl mb-4">🎉</div>
-        <h2 className="text-2xl font-bold mb-2" data-testid="text-no-more-profiles">
+        <h2 className="text-2xl font-bold mb-2 text-white" data-testid="text-no-more-profiles">
           You've seen everyone!
         </h2>
-        <p className="text-muted-foreground mb-6">
+        <p className="text-white/80 mb-6">
           Check back later for new members or adjust your filters to see more profiles.
         </p>
         <Button onClick={onFilterClick} data-testid="button-adjust-filters">
@@ -100,7 +104,16 @@ export default function SwipeInterface({
       {/* Profile Card */}
       <div className="flex-1 flex items-center justify-center p-4">
         <ProfileCard
-          {...currentProfile}
+          id={currentProfile.id}
+          name={currentProfile.name}
+          age={currentProfile.age}
+          location={currentProfile.location}
+          photos={currentProfile.photos}
+          bio={currentProfile.bio || ''}
+          interests={currentProfile.interests}
+          isVerified={currentProfile.is_verified}
+          isPremium={currentProfile.is_premium}
+          profileType={currentProfile.profile_type}
           onLike={handleLike}
           onPass={handlePass}
         />

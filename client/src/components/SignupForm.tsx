@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
 
 interface SignupFormProps {
   onSignup: (userData: {
@@ -22,35 +24,79 @@ export default function SignupForm({
   onLogin,
   isLoading = false,
 }: SignupFormProps) {
+  const { signUp } = useAuth();
+  const { toast } = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [agreeToPrivacy, setAgreeToPrivacy] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (password !== confirmPassword) {
-      alert("Passwords don't match");
+      toast({
+        title: "Error",
+        description: "Passwords don't match",
+        variant: "destructive",
+      });
       return;
     }
     
     if (!agreeToTerms || !agreeToPrivacy) {
-      alert("Please agree to the terms and privacy policy");
+      toast({
+        title: "Error",
+        description: "Please agree to the terms and privacy policy",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (parseInt(age) < 18) {
+      toast({
+        title: "Error",
+        description: "You must be 18 or older to sign up",
+        variant: "destructive",
+      });
       return;
     }
     
-    console.log(`Signup attempt with email: ${email}`);
-    onSignup({ email, password, name, age });
+    setLoading(true);
+    try {
+      const { error } = await signUp(email, password, {
+        name,
+        age: parseInt(age),
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "Success!",
+        description: "Please check your email to verify your account",
+      });
+      
+      // Auth state change will handle navigation to profile setup
+    } catch (error: any) {
+      toast({
+        title: "Signup failed",
+        description: error.message || "An error occurred during signup",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const isFormValid = email && password && confirmPassword && name && age && 
-                     password === confirmPassword && agreeToTerms && agreeToPrivacy;
+                     password === confirmPassword && agreeToTerms && agreeToPrivacy && !loading;
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -259,11 +305,11 @@ export default function SignupForm({
             {/* Sign Up Button - Matching Hero Section Style */}
             <button
               type="submit"
-              disabled={isLoading || !isFormValid}
+              disabled={loading || !isFormValid}
               className="w-full py-4 px-5 bg-gray-900 text-white font-bold text-lg rounded-full border-3 border-pink-500/50 transition-all duration-300 hover:border-pink-500 hover:shadow-lg hover:shadow-pink-500/50 animate-glow disabled:opacity-50 disabled:cursor-not-allowed"
               data-testid="button-sign-up"
             >
-              {isLoading ? "Creating Account..." : "Create Account"}
+              {loading ? "Creating Account..." : "Create Account"}
             </button>
 
             {/* Divider */}
